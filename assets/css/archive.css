@@ -115,6 +115,7 @@
 	cursor: pointer;
 	transition: background 0.15s ease;
 	margin-left: auto;
+	margin-bottom: 10px;
 }
 
 .pye-filters__submit:hover {
