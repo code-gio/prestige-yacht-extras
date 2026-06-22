@@ -1,0 +1,679 @@
+{
+  "key": "group_boat_listing",
+  "title": "Boat Listing",
+  "fields": [
+    {
+      "key": "field_document_id",
+      "label": "Document ID",
+      "name": "document_id",
+      "type": "text",
+      "required": 0,
+      "wrapper": { "width": "50" }
+    },
+    {
+      "key": "field_last_modified",
+      "label": "Last Modified",
+      "name": "last_modified",
+      "type": "text",
+      "required": 0,
+      "wrapper": { "width": "50" }
+    },
+    {
+      "key": "field_sale_class",
+      "label": "Sale Class",
+      "name": "sale_class",
+      "type": "select",
+      "required": 0,
+      "choices": {
+        "New": "New",
+        "Used": "Used"
+      },
+      "default_value": "",
+      "return_format": "value",
+      "wrapper": { "width": "33" }
+    },
+    {
+      "key": "field_boat_category",
+      "label": "Boat Category",
+      "name": "boat_category",
+      "type": "select",
+      "required": 0,
+      "choices": {
+        "Power": "Power",
+        "Sail": "Sail"
+      },
+      "default_value": "",
+      "return_format": "value",
+      "wrapper": { "width": "33" }
+    },
+    {
+      "key": "field_manufacturer",
+      "label": "Manufacturer",
+      "name": "manufacturer",
+      "type": "text",
+      "required": 0,
+      "wrapper": { "width": "33" }
+    },
+    {
+      "key": "field_model",
+      "label": "Model",
+      "name": "model",
+      "type": "text",
+      "required": 0,
+      "wrapper": { "width": "33" }
+    },
+    {
+      "key": "field_model_year",
+      "label": "Model Year",
+      "name": "model_year",
+      "type": "number",
+      "required": 0,
+      "wrapper": { "width": "33" }
+    },
+    {
+      "key": "field_boat_name",
+      "label": "Boat Name",
+      "name": "boat_name",
+      "type": "text",
+      "required": 0,
+      "wrapper": { "width": "33" }
+    },
+    {
+      "key": "field_listing_title",
+      "label": "Listing Title",
+      "name": "listing_title",
+      "type": "text",
+      "required": 0
+    },
+    {
+      "key": "field_boat_class",
+      "label": "Boat Class",
+      "name": "boat_class",
+      "type": "text",
+      "required": 0,
+      "wrapper": { "width": "50" }
+    },
+    {
+      "key": "field_hull_material",
+      "label": "Hull Material",
+      "name": "hull_material",
+      "type": "text",
+      "required": 0,
+      "wrapper": { "width": "50" }
+    },
+    {
+      "key": "field_nominal_length",
+      "label": "Nominal Length",
+      "name": "nominal_length",
+      "type": "number",
+      "required": 0,
+      "wrapper": { "width": "25" }
+    },
+    {
+      "key": "field_length_overall",
+      "label": "Length Overall",
+      "name": "length_overall",
+      "type": "number",
+      "required": 0,
+      "wrapper": { "width": "25" }
+    },
+    {
+      "key": "field_beam",
+      "label": "Beam",
+      "name": "beam",
+      "type": "number",
+      "required": 0,
+      "wrapper": { "width": "25" }
+    },
+    {
+      "key": "field_max_draft",
+      "label": "Max Draft",
+      "name": "max_draft",
+      "type": "number",
+      "required": 0,
+      "wrapper": { "width": "25" }
+    },
+    {
+      "key": "field_displacement",
+      "label": "Displacement",
+      "name": "displacement",
+      "type": "number",
+      "required": 0,
+      "wrapper": { "width": "50" }
+    },
+    {
+      "key": "field_num_engines",
+      "label": "Number of Engines",
+      "name": "num_engines",
+      "type": "number",
+      "required": 0,
+      "wrapper": { "width": "25" }
+    },
+    {
+      "key": "field_total_power",
+      "label": "Total Power (HP)",
+      "name": "total_power",
+      "type": "number",
+      "required": 0,
+      "wrapper": { "width": "25" }
+    },
+    {
+      "key": "field_engine_hours",
+      "label": "Engine Hours",
+      "name": "engine_hours",
+      "type": "number",
+      "required": 0,
+      "wrapper": { "width": "25" }
+    },
+    {
+      "key": "field_fuel_capacity",
+      "label": "Fuel Capacity",
+      "name": "fuel_capacity",
+      "type": "number",
+      "required": 0,
+      "wrapper": { "width": "25" }
+    },
+    {
+      "key": "field_water_capacity",
+      "label": "Water Capacity",
+      "name": "water_capacity",
+      "type": "number",
+      "required": 0,
+      "wrapper": { "width": "25" }
+    },
+    {
+      "key": "field_cabins",
+      "label": "Cabins",
+      "name": "cabins",
+      "type": "number",
+      "required": 0,
+      "wrapper": { "width": "25" }
+    },
+    {
+      "key": "field_heads",
+      "label": "Heads",
+      "name": "heads",
+      "type": "number",
+      "required": 0,
+      "wrapper": { "width": "25" }
+    },
+    {
+      "key": "field_price",
+      "label": "Price",
+      "name": "price",
+      "type": "number",
+      "required": 0,
+      "wrapper": { "width": "33" }
+    },
+    {
+      "key": "field_price_display",
+      "label": "Price Display",
+      "name": "price_display",
+      "type": "text",
+      "required": 0,
+      "wrapper": { "width": "33" }
+    },
+    {
+      "key": "field_price_hidden",
+      "label": "Price Hidden",
+      "name": "price_hidden",
+      "type": "true_false",
+      "required": 0,
+      "default_value": 0,
+      "ui": 1,
+      "wrapper": { "width": "33" }
+    },
+    {
+      "key": "field_city",
+      "label": "City",
+      "name": "city",
+      "type": "text",
+      "required": 0,
+      "wrapper": { "width": "33" }
+    },
+    {
+      "key": "field_state",
+      "label": "State",
+      "name": "state",
+      "type": "text",
+      "required": 0,
+      "wrapper": { "width": "33" }
+    },
+    {
+      "key": "field_country",
+      "label": "Country",
+      "name": "country",
+      "type": "text",
+      "required": 0,
+      "wrapper": { "width": "33" }
+    },
+    {
+      "key": "field_sales_rep_name",
+      "label": "Sales Rep Name",
+      "name": "sales_rep_name",
+      "type": "text",
+      "required": 0,
+      "wrapper": { "width": "33" }
+    },
+    {
+      "key": "field_office_phone",
+      "label": "Office Phone",
+      "name": "office_phone",
+      "type": "text",
+      "required": 0,
+      "wrapper": { "width": "33" }
+    },
+    {
+      "key": "field_office_email",
+      "label": "Office Email",
+      "name": "office_email",
+      "type": "text",
+      "required": 0,
+      "wrapper": { "width": "33" }
+    },
+    {
+      "key": "field_stock_number",
+      "label": "Stock Number",
+      "name": "stock_number",
+      "type": "text",
+      "required": 0,
+      "wrapper": { "width": "50" }
+    },
+    {
+      "key": "field_builder_name",
+      "label": "Builder Name",
+      "name": "builder_name",
+      "type": "text",
+      "required": 0,
+      "wrapper": { "width": "33" }
+    },
+    {
+      "key": "field_designer_name",
+      "label": "Designer Name",
+      "name": "designer_name",
+      "type": "text",
+      "required": 0,
+      "wrapper": { "width": "33" }
+    },
+    {
+      "key": "field_hull_id",
+      "label": "Hull ID (HIN)",
+      "name": "hull_id",
+      "type": "text",
+      "required": 0,
+      "wrapper": { "width": "33" }
+    },
+    {
+      "key": "field_original_price",
+      "label": "Original Price",
+      "name": "original_price",
+      "type": "number",
+      "required": 0,
+      "wrapper": { "width": "33" }
+    },
+    {
+      "key": "field_item_received_date",
+      "label": "Item Received Date",
+      "name": "item_received_date",
+      "type": "text",
+      "required": 0,
+      "wrapper": { "width": "33" }
+    },
+    {
+      "key": "field_tax_status",
+      "label": "Tax Status",
+      "name": "tax_status",
+      "type": "text",
+      "required": 0,
+      "wrapper": { "width": "33" }
+    },
+    {
+      "key": "field_cruising_speed",
+      "label": "Cruising Speed (kn)",
+      "name": "cruising_speed",
+      "type": "number",
+      "required": 0,
+      "wrapper": { "width": "33" }
+    },
+    {
+      "key": "field_max_speed",
+      "label": "Maximum Speed (kn)",
+      "name": "max_speed",
+      "type": "number",
+      "required": 0,
+      "wrapper": { "width": "33" }
+    },
+    {
+      "key": "field_range",
+      "label": "Range (mi)",
+      "name": "range",
+      "type": "number",
+      "required": 0,
+      "wrapper": { "width": "33" }
+    },
+    {
+      "key": "field_length_at_waterline",
+      "label": "Length at Waterline",
+      "name": "length_at_waterline",
+      "type": "number",
+      "required": 0,
+      "wrapper": { "width": "25" }
+    },
+    {
+      "key": "field_length_of_deck",
+      "label": "Length of Deck",
+      "name": "length_of_deck",
+      "type": "number",
+      "required": 0,
+      "wrapper": { "width": "25" }
+    },
+    {
+      "key": "field_bridge_clearance",
+      "label": "Bridge Clearance",
+      "name": "bridge_clearance",
+      "type": "number",
+      "required": 0,
+      "wrapper": { "width": "25" }
+    },
+    {
+      "key": "field_cabin_headroom",
+      "label": "Cabin Headroom",
+      "name": "cabin_headroom",
+      "type": "number",
+      "required": 0,
+      "wrapper": { "width": "25" }
+    },
+    {
+      "key": "field_freeboard",
+      "label": "Freeboard",
+      "name": "freeboard",
+      "type": "number",
+      "required": 0,
+      "wrapper": { "width": "25" }
+    },
+    {
+      "key": "field_deadrise",
+      "label": "Deadrise (°)",
+      "name": "deadrise",
+      "type": "number",
+      "required": 0,
+      "wrapper": { "width": "25" }
+    },
+    {
+      "key": "field_drive_up",
+      "label": "Drive Up Draft",
+      "name": "drive_up",
+      "type": "number",
+      "required": 0,
+      "wrapper": { "width": "25" }
+    },
+    {
+      "key": "field_dry_weight",
+      "label": "Dry Weight",
+      "name": "dry_weight",
+      "type": "number",
+      "required": 0,
+      "wrapper": { "width": "25" }
+    },
+    {
+      "key": "field_ballast_weight",
+      "label": "Ballast Weight",
+      "name": "ballast_weight",
+      "type": "number",
+      "required": 0,
+      "wrapper": { "width": "33" }
+    },
+    {
+      "key": "field_displacement_type",
+      "label": "Displacement Type",
+      "name": "displacement_type",
+      "type": "text",
+      "required": 0,
+      "wrapper": { "width": "33" }
+    },
+    {
+      "key": "field_drive_type",
+      "label": "Drive Type",
+      "name": "drive_type",
+      "type": "text",
+      "required": 0,
+      "wrapper": { "width": "33" }
+    },
+    {
+      "key": "field_keel_type",
+      "label": "Keel Type",
+      "name": "keel_type",
+      "type": "text",
+      "required": 0,
+      "wrapper": { "width": "33" }
+    },
+    {
+      "key": "field_windlass_type",
+      "label": "Windlass Type",
+      "name": "windlass_type",
+      "type": "text",
+      "required": 0,
+      "wrapper": { "width": "33" }
+    },
+    {
+      "key": "field_electrical_circuit",
+      "label": "Electrical Circuit (V)",
+      "name": "electrical_circuit",
+      "type": "number",
+      "required": 0,
+      "wrapper": { "width": "33" }
+    },
+    {
+      "key": "field_max_passengers",
+      "label": "Maximum Passengers",
+      "name": "max_passengers",
+      "type": "number",
+      "required": 0,
+      "wrapper": { "width": "33" }
+    },
+    {
+      "key": "field_fuel_tank_count",
+      "label": "Fuel Tank Count",
+      "name": "fuel_tank_count",
+      "type": "number",
+      "required": 0,
+      "wrapper": { "width": "33" }
+    },
+    {
+      "key": "field_fuel_tank_material",
+      "label": "Fuel Tank Material",
+      "name": "fuel_tank_material",
+      "type": "text",
+      "required": 0,
+      "wrapper": { "width": "33" }
+    },
+    {
+      "key": "field_water_tank_count",
+      "label": "Water Tank Count",
+      "name": "water_tank_count",
+      "type": "number",
+      "required": 0,
+      "wrapper": { "width": "33" }
+    },
+    {
+      "key": "field_water_tank_material",
+      "label": "Water Tank Material",
+      "name": "water_tank_material",
+      "type": "text",
+      "required": 0,
+      "wrapper": { "width": "33" }
+    },
+    {
+      "key": "field_holding_tank_capacity",
+      "label": "Holding Tank Capacity",
+      "name": "holding_tank_capacity",
+      "type": "number",
+      "required": 0,
+      "wrapper": { "width": "33" }
+    },
+    {
+      "key": "field_holding_tank_count",
+      "label": "Holding Tank Count",
+      "name": "holding_tank_count",
+      "type": "number",
+      "required": 0,
+      "wrapper": { "width": "33" }
+    },
+    {
+      "key": "field_holding_tank_material",
+      "label": "Holding Tank Material",
+      "name": "holding_tank_material",
+      "type": "text",
+      "required": 0,
+      "wrapper": { "width": "33" }
+    },
+    {
+      "key": "field_convertible_saloon",
+      "label": "Convertible Saloon",
+      "name": "convertible_saloon",
+      "type": "true_false",
+      "required": 0,
+      "default_value": 0,
+      "ui": 1,
+      "wrapper": { "width": "20" }
+    },
+    {
+      "key": "field_trim_tabs",
+      "label": "Trim Tabs",
+      "name": "trim_tabs",
+      "type": "true_false",
+      "required": 0,
+      "default_value": 0,
+      "ui": 1,
+      "wrapper": { "width": "20" }
+    },
+    {
+      "key": "field_has_360_photo",
+      "label": "Has 360° Photo",
+      "name": "has_360_photo",
+      "type": "true_false",
+      "required": 0,
+      "default_value": 0,
+      "ui": 1,
+      "wrapper": { "width": "20" }
+    },
+    {
+      "key": "field_has_immersive_tour",
+      "label": "Has Immersive Tour",
+      "name": "has_immersive_tour",
+      "type": "true_false",
+      "required": 0,
+      "default_value": 0,
+      "ui": 1,
+      "wrapper": { "width": "20" }
+    },
+    {
+      "key": "field_has_embedded_video",
+      "label": "Has Embedded Video",
+      "name": "has_embedded_video",
+      "type": "true_false",
+      "required": 0,
+      "default_value": 0,
+      "ui": 1,
+      "wrapper": { "width": "20" }
+    },
+    {
+      "key": "field_images",
+      "label": "Images",
+      "name": "images",
+      "type": "gallery",
+      "required": 0,
+      "return_format": "id",
+      "library": "all",
+      "min": 0,
+      "max": 0,
+      "preview_size": "medium",
+      "insert": "append"
+    },
+    {
+      "key": "field_video_urls",
+      "label": "Video URLs",
+      "name": "video_urls",
+      "type": "repeater",
+      "required": 0,
+      "layout": "table",
+      "button_label": "Add Video",
+      "sub_fields": [
+        {
+          "key": "field_video_urls_url",
+          "label": "URL",
+          "name": "url",
+          "type": "url",
+          "required": 0
+        }
+      ]
+    },
+    {
+      "key": "field_engines",
+      "label": "Engines",
+      "name": "engines",
+      "type": "repeater",
+      "required": 0,
+      "layout": "table",
+      "button_label": "Add Engine",
+      "sub_fields": [
+        { "key": "field_engines_make", "label": "Make", "name": "make", "type": "text", "required": 0 },
+        { "key": "field_engines_model", "label": "Model", "name": "model", "type": "text", "required": 0 },
+        { "key": "field_engines_year", "label": "Year", "name": "year", "type": "number", "required": 0 },
+        { "key": "field_engines_power", "label": "Power (HP)", "name": "power", "type": "number", "required": 0 },
+        { "key": "field_engines_hours", "label": "Hours", "name": "hours", "type": "number", "required": 0 },
+        { "key": "field_engines_fuel", "label": "Fuel", "name": "fuel", "type": "text", "required": 0 },
+        { "key": "field_engines_type", "label": "Type", "name": "type", "type": "text", "required": 0 },
+        { "key": "field_engines_transmission", "label": "Transmission", "name": "transmission", "type": "text", "required": 0 },
+        { "key": "field_engines_propeller_type", "label": "Propeller Type", "name": "propeller_type", "type": "text", "required": 0 },
+        { "key": "field_engines_location", "label": "Location", "name": "location", "type": "text", "required": 0 }
+      ]
+    },
+    {
+      "key": "field_external_links",
+      "label": "External Links",
+      "name": "external_links",
+      "type": "repeater",
+      "required": 0,
+      "layout": "table",
+      "button_label": "Add Link",
+      "sub_fields": [
+        { "key": "field_external_links_uri", "label": "URL", "name": "uri", "type": "url", "required": 0 },
+        { "key": "field_external_links_text", "label": "Text", "name": "text", "type": "text", "required": 0 },
+        { "key": "field_external_links_type", "label": "Type", "name": "type", "type": "text", "required": 0 }
+      ]
+    },
+    {
+      "key": "field_description",
+      "label": "Description",
+      "name": "description",
+      "type": "textarea",
+      "required": 0,
+      "new_lines": ""
+    },
+    {
+      "key": "field_additional_specs",
+      "label": "Additional Specs",
+      "name": "additional_specs",
+      "type": "textarea",
+      "required": 0,
+      "new_lines": ""
+    }
+  ],
+  "location": [
+    [
+      {
+        "param": "post_type",
+        "operator": "==",
+        "value": "boat"
+      }
+    ]
+  ],
+  "menu_order": 0,
+  "position": "normal",
+  "style": "default",
+  "label_placement": "top",
+  "instruction_placement": "label",
+  "active": true,
+  "show_in_rest": 1
+}

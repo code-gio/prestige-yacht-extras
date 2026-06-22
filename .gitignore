@@ -1,0 +1,10 @@
+# OS / editor
+.DS_Store
+Thumbs.db
+*.log
+
+# Composer: vendor/ IS committed for WP Engine deploy (no build step), so it is NOT ignored.
+# composer.lock IS committed intentionally.
+
+# Local Claude settings
+.claude/settings.local.json

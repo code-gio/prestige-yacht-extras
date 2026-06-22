@@ -1,0 +1,219 @@
+@page {
+	margin: 130px 40px 70px 40px;
+}
+
+* {
+	box-sizing: border-box;
+}
+
+body {
+	font-family: {{FONT}};
+	font-size: 10pt;
+	color: #222;
+	margin: 0;
+	line-height: 1.45;
+}
+
+/* Running header / footer on every page */
+.doc-header {
+	position: fixed;
+	top: -110px;
+	left: 0;
+	right: 0;
+	height: 90px;
+	border-bottom: 2px solid {{PRIMARY}};
+	padding-bottom: 8px;
+}
+
+.doc-header .logo {
+	height: 56px;
+}
+
+.doc-header .company {
+	font-size: 18pt;
+	font-weight: 700;
+	color: {{PRIMARY}};
+	letter-spacing: 0.5px;
+}
+
+.doc-header .tagline {
+	font-size: 8pt;
+	color: {{ACCENT}};
+	text-transform: uppercase;
+	letter-spacing: 2px;
+}
+
+.doc-footer {
+	position: fixed;
+	bottom: -50px;
+	left: 0;
+	right: 0;
+	height: 40px;
+	border-top: 1px solid #ccc;
+	padding-top: 6px;
+	font-size: 8pt;
+	color: #666;
+}
+
+.doc-footer .broker {
+	color: {{PRIMARY}};
+	font-weight: 600;
+}
+
+.doc-footer .page-num:after {
+	content: counter(page);
+}
+
+/* Cover */
+.cover-title {
+	font-size: 22pt;
+	font-weight: 700;
+	color: {{PRIMARY}};
+	margin: 0 0 2px 0;
+}
+
+.cover-meta {
+	font-size: 10pt;
+	color: #555;
+	margin-bottom: 10px;
+}
+
+.cover-price {
+	display: inline-block;
+	background: {{PRIMARY}};
+	color: #fff;
+	font-size: 14pt;
+	font-weight: 700;
+	padding: 6px 14px;
+	border-radius: 4px;
+	margin-bottom: 12px;
+}
+
+.hero {
+	width: 100%;
+	height: 300px;
+	background: #f0f0f0;
+	margin-bottom: 14px;
+	text-align: center;
+}
+
+.hero img {
+	max-width: 100%;
+	max-height: 300px;
+}
+
+/* Key facts strip */
+.key-facts {
+	width: 100%;
+	border-collapse: collapse;
+	margin-bottom: 18px;
+}
+
+.key-facts td {
+	width: 25%;
+	border: 1px solid #e3e3e3;
+	background: #fafafa;
+	padding: 8px 10px;
+	text-align: center;
+}
+
+.key-facts .kf-label {
+	display: block;
+	font-size: 7.5pt;
+	text-transform: uppercase;
+	letter-spacing: 1px;
+	color: {{ACCENT}};
+}
+
+.key-facts .kf-value {
+	display: block;
+	font-size: 12pt;
+	font-weight: 700;
+	color: {{PRIMARY}};
+}
+
+/* Section headings */
+.section {
+	margin-bottom: 16px;
+	page-break-inside: avoid;
+}
+
+.section h2 {
+	font-size: 12pt;
+	color: #fff;
+	background: {{PRIMARY}};
+	margin: 0 0 0 0;
+	padding: 5px 10px;
+	border-radius: 3px 3px 0 0;
+}
+
+/* Spec tables */
+.spec-table {
+	width: 100%;
+	border-collapse: collapse;
+}
+
+.spec-table td {
+	padding: 5px 10px;
+	border-bottom: 1px solid #ececec;
+	vertical-align: top;
+}
+
+.spec-table tr td:first-child {
+	width: 45%;
+	color: #666;
+	font-weight: 600;
+}
+
+.spec-table tr:nth-child(even) td {
+	background: #fafafa;
+}
+
+/* Engines table */
+.engines-table {
+	width: 100%;
+	border-collapse: collapse;
+	font-size: 9pt;
+}
+
+.engines-table th {
+	background: {{ACCENT}};
+	color: #fff;
+	padding: 5px 6px;
+	text-align: left;
+	font-size: 8pt;
+}
+
+.engines-table td {
+	padding: 5px 6px;
+	border-bottom: 1px solid #ececec;
+}
+
+/* Description */
+.description {
+	font-size: 10pt;
+	white-space: pre-line;
+}
+
+/* Photo grid */
+.photos-page {
+	page-break-before: always;
+}
+
+.photo-grid {
+	width: 100%;
+	border-collapse: collapse;
+}
+
+.photo-grid td {
+	width: 50%;
+	padding: 4px;
+	text-align: center;
+	vertical-align: middle;
+}
+
+.photo-grid img {
+	max-width: 100%;
+	max-height: 180px;
+	border: 1px solid #ddd;
+}
