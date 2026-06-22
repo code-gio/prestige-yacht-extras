@@ -242,10 +242,14 @@ final class BoatData {
 	}
 
 	/**
-	 * Display title: listing_title, else "Year Manufacturer Model", else the post title.
+	 * Display title: the boat post title (editor title), falling back to listing_title,
+	 * then "Year Manufacturer Model".
 	 */
 	private function title(): string {
-		$title = $this->field( 'listing_title' );
+		$title = trim( (string) get_the_title( $this->post_id ) );
+		if ( '' === $title ) {
+			$title = $this->field( 'listing_title' );
+		}
 		if ( '' === $title ) {
 			$title = trim(
 				sprintf(
@@ -255,9 +259,6 @@ final class BoatData {
 					$this->field( 'model' )
 				)
 			);
-		}
-		if ( '' === $title ) {
-			$title = (string) get_the_title( $this->post_id );
 		}
 		return $title;
 	}
