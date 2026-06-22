@@ -10,4 +10,5 @@ if ( ! defined( 'WP_UNINSTALL_PLUGIN' ) ) {
 	exit;
 }
 
+delete_option( 'pye_rewrite_version' );
 flush_rewrite_rules();
