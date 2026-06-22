@@ -189,10 +189,17 @@ body {
 	border-bottom: 1px solid #ececec;
 }
 
-/* Description */
+/* Description (rendered HTML from the editor) */
 .description {
 	font-size: 10pt;
-	white-space: pre-line;
+}
+
+.description p {
+	margin: 0 0 8px 0;
+}
+
+.description p:last-child {
+	margin-bottom: 0;
 }
 
 /* Photo grid */
