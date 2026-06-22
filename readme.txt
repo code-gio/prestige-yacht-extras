@@ -28,6 +28,17 @@ description, and a gallery photo grid.
 * Pretty permalinks: `/boat/{slug}/pdf/`
 * Plain permalinks: `?boat_pdf={id}`
 
+= Boat archive =
+
+`[boat_archive]` — a filterable, AJAX-driven grid of boat listings (Yacht Search bar +
+3-column cards + Load More). Optional attributes:
+
+`[boat_archive per_page="12" columns="3"]`
+
+Filters: category (Power/Sail), condition (New/Used), manufacturer, length range, price range.
+Filter state is reflected in the URL so searches are shareable. Initial results are
+server-rendered (SEO + works without JS); changes and Load More use AJAX.
+
 == Installation ==
 
 The plugin is upload-and-go — Dompdf is bundled in `vendor/`, so no Composer step is needed.
@@ -48,6 +59,9 @@ Developers may instead run `composer install` to manage Dompdf via Composer; the
 * PHP 7.4+ with the GD or Imagick extension for image rendering in PDFs.
 
 == Changelog ==
+
+= 1.1.0 =
+* Add [boat_archive] filterable AJAX boat grid (category, condition, manufacturer, length, price).
 
 = 1.0.0 =
 * Initial release: server-side PDF spec sheets + [boat_pdf_button] shortcode.

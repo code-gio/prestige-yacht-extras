@@ -3,6 +3,9 @@ declare( strict_types=1 );
 
 namespace PrestigeYacht\Extras;
 
+use PrestigeYacht\Extras\Archive\AjaxController;
+use PrestigeYacht\Extras\Archive\ArchiveShortcode;
+use PrestigeYacht\Extras\Archive\ManufacturerOptions;
 use PrestigeYacht\Extras\Pdf\PdfController;
 use PrestigeYacht\Extras\Shortcodes\PdfButtonShortcode;
 use PrestigeYacht\Extras\Support\Assets;
@@ -36,9 +39,30 @@ final class Plugin {
 		add_filter( 'query_vars', [ $this->pdf_controller, 'register_query_var' ] );
 		add_action( 'template_redirect', [ $this->pdf_controller, 'maybe_render' ] );
 
-		// Shortcode + assets.
+		// PDF button shortcode + assets.
 		add_shortcode( 'boat_pdf_button', [ new PdfButtonShortcode(), 'render' ] );
 		add_action( 'wp_enqueue_scripts', [ new Assets(), 'enqueue' ] );
+
+		// Boat archive shortcode + AJAX.
+		$archive = new ArchiveShortcode();
+		add_action( 'init', [ $archive, 'register_assets' ] );
+		add_shortcode( 'boat_archive', [ $archive, 'render' ] );
+
+		$ajax = new AjaxController();
+		add_action( 'wp_ajax_' . ArchiveShortcode::AJAX_ACTION, [ $ajax, 'handle' ] );
+		add_action( 'wp_ajax_nopriv_' . ArchiveShortcode::AJAX_ACTION, [ $ajax, 'handle' ] );
+
+		// Keep the manufacturer filter list fresh (scoped to boats only).
+		add_action( 'save_post_' . self::POST_TYPE, [ ManufacturerOptions::class, 'flush' ] );
+		add_action(
+			'before_delete_post',
+			static function ( $post_id ): void {
+				// before_delete_post (not deleted_post) so get_post_type still resolves.
+				if ( self::POST_TYPE === get_post_type( (int) $post_id ) ) {
+					ManufacturerOptions::flush();
+				}
+			}
+		);
 	}
 
 	/**

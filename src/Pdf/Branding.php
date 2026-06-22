@@ -30,10 +30,17 @@ final class Branding {
 	public const COMPANY = 'Prestige Yacht Sales';
 
 	/**
-	 * Absolute path to the logo, or '' if it is missing.
+	 * Absolute filesystem path to the logo (for Dompdf), or '' if it is missing.
 	 */
 	public static function logo_path(): string {
 		$path = PYE_DIR . 'assets/brand/' . self::LOGO_FILE;
 		return is_readable( $path ) ? $path : '';
+	}
+
+	/**
+	 * Public URL to the logo (for front-end <img>), or '' if it is missing.
+	 */
+	public static function logo_url(): string {
+		return '' !== self::logo_path() ? PYE_URL . 'assets/brand/' . self::LOGO_FILE : '';
 	}
 }

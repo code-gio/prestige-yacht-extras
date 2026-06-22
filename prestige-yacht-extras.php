@@ -3,7 +3,7 @@
  * Plugin Name:       Prestige Yacht Extras
  * Plugin URI:        https://prestigeyacht.com/
  * Description:        Generates branded PDF spec sheets for boat listings, plus tools for the Prestige Yacht site.
- * Version:           1.0.0
+ * Version:           1.1.0
  * Requires at least: 6.0
  * Requires PHP:      7.4
  * Author:            Codegio
@@ -23,7 +23,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
-define( 'PYE_VERSION', '1.0.0' );
+define( 'PYE_VERSION', '1.1.0' );
 define( 'PYE_FILE', __FILE__ );
 define( 'PYE_DIR', plugin_dir_path( __FILE__ ) );
 define( 'PYE_URL', plugin_dir_url( __FILE__ ) );

@@ -29,27 +29,27 @@ final class BoatData {
 	}
 
 	/**
-	 * @return array<string,mixed>
+	 * Minimal data for an archive/grid card. Reuses the title/location/price formatting
+	 * without the heavy gallery path resolution used by the PDF.
+	 *
+	 * @return array{id:int,permalink:string,title:string,location:string,price:string,thumb_id:int}
 	 */
-	private function build(): array {
-		$title = $this->field( 'listing_title' );
-		if ( '' === (string) $title ) {
-			$title = trim(
-				sprintf(
-					'%s %s %s',
-					(string) $this->field( 'model_year' ),
-					(string) $this->field( 'manufacturer' ),
-					(string) $this->field( 'model' )
-				)
-			);
-		}
-		if ( '' === $title ) {
-			$title = get_the_title( $this->post_id );
-		}
+	public static function card( int $post_id ): array {
+		$self = new self( $post_id );
+		return [
+			'id'        => $post_id,
+			'permalink' => (string) get_permalink( $post_id ),
+			'title'     => $self->title(),
+			'location'  => $self->location(),
+			'price'     => $self->price_display(),
+			'thumb_id'  => (int) get_post_thumbnail_id( $post_id ),
+		];
+	}
 
+	private function build(): array {
 		return [
 			'id'              => $this->post_id,
-			'title'           => $title,
+			'title'           => $this->title(),
 			'price'           => $this->price_display(),
 			'location'        => $this->location(),
 			'hero'            => $this->hero_image(),
@@ -239,6 +239,27 @@ final class BoatData {
 			}
 		}
 		return $paths;
+	}
+
+	/**
+	 * Display title: listing_title, else "Year Manufacturer Model", else the post title.
+	 */
+	private function title(): string {
+		$title = $this->field( 'listing_title' );
+		if ( '' === $title ) {
+			$title = trim(
+				sprintf(
+					'%s %s %s',
+					$this->field( 'model_year' ),
+					$this->field( 'manufacturer' ),
+					$this->field( 'model' )
+				)
+			);
+		}
+		if ( '' === $title ) {
+			$title = (string) get_the_title( $this->post_id );
+		}
+		return $title;
 	}
 
 	private function price_display(): string {
