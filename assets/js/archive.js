@@ -147,7 +147,7 @@
 				return;
 			}
 			var url = new URL( window.location.href );
-			[ 'category', 'condition', 'mfr', 'len_min', 'len_max', 'price_min', 'price_max' ].forEach( function ( k ) {
+			[ 'category', 'mfr', 'len_min', 'len_max' ].forEach( function ( k ) {
 				if ( params[ k ] ) {
 					url.searchParams.set( k, params[ k ] );
 				} else {

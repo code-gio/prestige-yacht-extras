@@ -62,20 +62,54 @@ an engines table, the description (rendered HTML), and gallery photo pages.
 
 Renders the "Yacht Search" filter bar, a responsive card grid, and a "Load More" button.
 
-| Attribute  | Default | Description                       |
-|------------|---------|-----------------------------------|
-| `per_page` | `12`    | Cards per page / per Load More.   |
-| `columns`  | `3`     | Desktop grid columns (1–4).       |
+| Attribute      | Default | Description                                                        |
+|----------------|---------|--------------------------------------------------------------------|
+| `per_page`     | `12`    | Cards per page / per Load More.                                    |
+| `columns`      | `3`     | Desktop grid columns (1–4).                                        |
+| `category`     | —       | Preset category: `Power` or `Sail`.                               |
+| `manufacturer` | —       | Preset manufacturer (exact match).                                |
+| `len_min`      | —       | Preset minimum length (ft).                                       |
+| `len_max`      | —       | Preset maximum length (ft).                                       |
+| `lock`         | —       | Comma list of filters to lock (hide + enforce): `category`, `manufacturer`, `length`. |
+
+**Filters:** category (All / Power / Sail), manufacturer (auto-populated from your listings),
+and a length range. Results are **always sorted longest → shortest** by length, regardless of
+the filters. Filter state is reflected in the URL (shareable/bookmarkable). The first page is
+server-rendered (works without JS, indexable); filter changes and Load More use AJAX.
 
 ```text
 [boat_archive]
 [boat_archive per_page="9" columns="3"]
 ```
 
-**Filters:** category (Power/Sail), condition (New/Used), manufacturer (auto-populated from your
-listings), length range, and price range. The filter state is reflected in the URL, so a
-filtered view is shareable/bookmarkable. The first page is server-rendered (works without JS and
-is indexable); filter changes and Load More use AJAX.
+#### Pre-filtered pages
+
+There are two ways to start the archive with a filter already applied:
+
+1. **URL parameter** (soft default — the visitor can change it). Link to the page that holds
+   `[boat_archive]` with any of `category`, `mfr`, `len_min`, `len_max`:
+
+   ```text
+   /boats-for-sale/?mfr=Beneteau
+   /boats-for-sale/?category=Sail
+   ```
+
+   The bar opens pre-selected to that filter, and the visitor can clear or change it. This is
+   ideal for the homepage brand slider — point each brand at `?mfr=<Brand>` instead of a custom
+   search URL.
+
+2. **Locked shortcode** (hard — the filter is enforced and hidden, the rest of the bar refines
+   within it). Use a dedicated page per fixed category/brand:
+
+   ```text
+   Power Yachts page:  [boat_archive category="Power" lock="category"]
+   Sail page:          [boat_archive category="Sail"  lock="category"]
+   Beneteau page:      [boat_archive manufacturer="Beneteau" lock="manufacturer"]
+   ```
+
+   On the Power page the Power/Sail toggle is hidden and *every* result (and Load More, and any
+   manufacturer/length search) stays within Power. On a brand page the manufacturer dropdown is
+   hidden and results stay within that brand.
 
 ---
 

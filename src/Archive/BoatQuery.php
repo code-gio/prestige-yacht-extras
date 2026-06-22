@@ -8,13 +8,19 @@ use WP_Query;
 
 /**
  * Translates a set of sanitized filter params into a WP_Query of boat listings.
+ *
+ * Results are ALWAYS ordered by length, longest to shortest, regardless of the active
+ * filters (per client requirement). Boats without a length sort last.
  */
 final class BoatQuery {
 
 	public const DEFAULT_PER_PAGE = 12;
 
-	/** Meta key used for the length filter (advertised length). */
+	/** Meta key used for the length filter + ordering (advertised length). */
 	private const LENGTH_KEY = 'nominal_length';
+
+	/** Filter keys this query understands. */
+	public const KEYS = [ 'category', 'mfr', 'len_min', 'len_max' ];
 
 	/**
 	 * Sanitize a raw input array (from $_GET or an AJAX POST) into known filter params.
@@ -31,20 +37,14 @@ final class BoatQuery {
 		$category = isset( $input['category'] ) ? ucfirst( strtolower( (string) $input['category'] ) ) : '';
 		$category = in_array( $category, [ 'Power', 'Sail' ], true ) ? $category : '';
 
-		$condition = isset( $input['condition'] ) ? ucfirst( strtolower( (string) $input['condition'] ) ) : '';
-		$condition = in_array( $condition, [ 'New', 'Used' ], true ) ? $condition : '';
-
 		$paged = isset( $input['paged'] ) ? max( 1, (int) $input['paged'] ) : 1;
 
 		return [
-			'category'  => $category,
-			'condition' => $condition,
-			'mfr'       => isset( $input['mfr'] ) ? sanitize_text_field( (string) $input['mfr'] ) : '',
-			'len_min'   => $num( $input['len_min'] ?? '' ),
-			'len_max'   => $num( $input['len_max'] ?? '' ),
-			'price_min' => $num( $input['price_min'] ?? '' ),
-			'price_max' => $num( $input['price_max'] ?? '' ),
-			'paged'     => $paged,
+			'category' => $category,
+			'mfr'      => isset( $input['mfr'] ) ? sanitize_text_field( (string) $input['mfr'] ) : '',
+			'len_min'  => $num( $input['len_min'] ?? '' ),
+			'len_max'  => $num( $input['len_max'] ?? '' ),
+			'paged'    => $paged,
 		];
 	}
 
@@ -64,13 +64,6 @@ final class BoatQuery {
 				'compare' => '=',
 			];
 		}
-		if ( '' !== $f['condition'] ) {
-			$meta_query[] = [
-				'key'     => 'sale_class',
-				'value'   => $f['condition'],
-				'compare' => '=',
-			];
-		}
 		if ( '' !== $f['mfr'] ) {
 			$meta_query[] = [
 				'key'     => 'manufacturer',
@@ -79,42 +72,30 @@ final class BoatQuery {
 			];
 		}
 
-		$range = static function ( string $key, string $min, string $max ): ?array {
-			if ( '' !== $min && '' !== $max ) {
-				return [ 'key' => $key, 'value' => [ (float) $min, (float) $max ], 'type' => 'NUMERIC', 'compare' => 'BETWEEN' ];
-			}
-			if ( '' !== $min ) {
-				return [ 'key' => $key, 'value' => (float) $min, 'type' => 'NUMERIC', 'compare' => '>=' ];
-			}
-			if ( '' !== $max ) {
-				return [ 'key' => $key, 'value' => (float) $max, 'type' => 'NUMERIC', 'compare' => '<=' ];
-			}
-			return null;
-		};
+		if ( '' !== $f['len_min'] && '' !== $f['len_max'] ) {
+			$meta_query[] = [ 'key' => self::LENGTH_KEY, 'value' => [ (float) $f['len_min'], (float) $f['len_max'] ], 'type' => 'NUMERIC', 'compare' => 'BETWEEN' ];
+		} elseif ( '' !== $f['len_min'] ) {
+			$meta_query[] = [ 'key' => self::LENGTH_KEY, 'value' => (float) $f['len_min'], 'type' => 'NUMERIC', 'compare' => '>=' ];
+		} elseif ( '' !== $f['len_max'] ) {
+			$meta_query[] = [ 'key' => self::LENGTH_KEY, 'value' => (float) $f['len_max'], 'type' => 'NUMERIC', 'compare' => '<=' ];
+		}
 
-		$len = $range( self::LENGTH_KEY, $f['len_min'], $f['len_max'] );
-		if ( $len ) {
-			$meta_query[] = $len;
-		}
-		$price = $range( 'price', $f['price_min'], $f['price_max'] );
-		if ( $price ) {
-			$meta_query[] = $price;
-		}
+		// Order by length DESC for every query, including boats missing a length (sorted last).
+		$meta_query['length_order'] = [
+			'relation' => 'OR',
+			[ 'key' => self::LENGTH_KEY, 'type' => 'NUMERIC', 'compare' => 'EXISTS' ],
+			[ 'key' => self::LENGTH_KEY, 'type' => 'NUMERIC', 'compare' => 'NOT EXISTS' ],
+		];
 
 		$args = [
 			'post_type'      => Plugin::POST_TYPE,
 			'post_status'    => 'publish',
 			'posts_per_page' => $per_page,
 			'paged'          => (int) $f['paged'],
-			'orderby'        => 'date',
-			'order'          => 'DESC',
+			'orderby'        => [ 'length_order' => 'DESC' ],
+			'meta_query'     => $meta_query,
 			'no_found_rows'  => false, // need found_posts for pagination.
 		];
-
-		// Only attach meta_query if it has real clauses (beyond the relation key).
-		if ( count( $meta_query ) > 1 ) {
-			$args['meta_query'] = $meta_query;
-		}
 
 		return new WP_Query( $args );
 	}

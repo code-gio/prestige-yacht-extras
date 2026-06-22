@@ -35,9 +35,15 @@ description, and a gallery photo grid.
 
 `[boat_archive per_page="12" columns="3"]`
 
-Filters: category (Power/Sail), condition (New/Used), manufacturer, length range, price range.
-Filter state is reflected in the URL so searches are shareable. Initial results are
-server-rendered (SEO + works without JS); changes and Load More use AJAX.
+Filters: category (All/Power/Sail), manufacturer, and length range. Results are always sorted
+longest to shortest by length. Filter state is reflected in the URL so searches are shareable.
+Initial results are server-rendered (SEO + works without JS); changes and Load More use AJAX.
+
+Pre-filtered pages:
+* URL parameter (soft): link to the archive page with ?mfr=Beneteau or ?category=Sail.
+* Locked shortcode (hard): [boat_archive category="Power" lock="category"] or
+  [boat_archive manufacturer="Beneteau" lock="manufacturer"] — the locked filter is hidden and
+  enforced; the rest of the bar refines within it.
 
 == Installation ==
 
@@ -59,6 +65,12 @@ Developers may instead run `composer install` to manage Dompdf via Composer; the
 * PHP 7.4+ with the GD or Imagick extension for image rendering in PDFs.
 
 == Changelog ==
+
+= 1.2.0 =
+* Boat archive always sorts longest-to-shortest by length.
+* Remove condition (New/Used) and price filters for a more minimal bar.
+* Add preset/lock attributes (category, manufacturer, len_min/len_max, lock) for pre-filtered
+  pages (Power/Sail, brand) plus URL-parameter defaults.
 
 = 1.1.0 =
 * Add [boat_archive] filterable AJAX boat grid (category, condition, manufacturer, length, price).
