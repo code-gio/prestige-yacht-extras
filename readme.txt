@@ -30,12 +30,16 @@ description, and a gallery photo grid.
 
 == Installation ==
 
-1. Upload the plugin to `wp-content/plugins/prestige-yacht-extras`.
-2. From the plugin directory run `composer install` (installs Dompdf into `vendor/`).
-   If you deploy a build with `vendor/` already committed, skip this step.
-3. Activate the plugin.
-4. Go to Settings → Permalinks and click Save to flush rewrite rules (registers the PDF endpoint).
-5. Add `[boat_pdf_button]` to your single-boat template or a boat's content.
+The plugin is upload-and-go — Dompdf is bundled in `vendor/`, so no Composer step is needed.
+
+1. Upload the plugin ZIP via Plugins → Add New → Upload Plugin (or copy the folder to
+   `wp-content/plugins/prestige-yacht-extras`).
+2. Activate the plugin.
+3. Go to Settings → Permalinks and click Save to flush rewrite rules (registers the PDF endpoint).
+4. Add `[boat_pdf_button]` to your single-boat template or a boat's content.
+
+Developers may instead run `composer install` to manage Dompdf via Composer; the bundled
+`vendor/` already satisfies the dependency at runtime.
 
 == Requirements ==
 

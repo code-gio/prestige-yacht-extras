@@ -29,9 +29,27 @@ define( 'PYE_DIR', plugin_dir_path( __FILE__ ) );
 define( 'PYE_URL', plugin_dir_url( __FILE__ ) );
 
 /**
- * Load the Composer autoloader. Dompdf and the plugin's PSR-4 classes live there.
- * If it is missing (deploy without `composer install`), show an admin notice and bail
- * gracefully instead of fataling.
+ * Autoload this plugin's own classes (PSR-4: PrestigeYacht\Extras\ => src/).
+ * Lightweight and self-contained so the plugin does not depend on Composer at runtime.
+ */
+spl_autoload_register(
+	static function ( string $class ): void {
+		$prefix = 'PrestigeYacht\\Extras\\';
+		if ( 0 !== strncmp( $class, $prefix, strlen( $prefix ) ) ) {
+			return;
+		}
+		$relative = substr( $class, strlen( $prefix ) );
+		$file     = PYE_DIR . 'src/' . str_replace( '\\', '/', $relative ) . '.php';
+		if ( is_readable( $file ) ) {
+			require $file;
+		}
+	}
+);
+
+/**
+ * Load the bundled Dompdf library (ships inside the plugin's vendor/ directory, so the
+ * plugin is upload-and-go with no `composer install` required). If it is somehow missing,
+ * show an admin notice and bail gracefully instead of fataling.
  */
 $pye_autoload = PYE_DIR . 'vendor/autoload.php';
 
@@ -39,7 +57,7 @@ if ( ! is_readable( $pye_autoload ) ) {
 	add_action(
 		'admin_notices',
 		static function () {
-			echo '<div class="notice notice-error"><p><strong>Prestige Yacht Extras:</strong> dependencies are not installed. Run <code>composer install</code> in the plugin directory.</p></div>';
+			echo '<div class="notice notice-error"><p><strong>Prestige Yacht Extras:</strong> the bundled PDF library is missing. Re-upload the full plugin (including its <code>vendor/</code> folder) or run <code>composer install</code>.</p></div>';
 		}
 	);
 	return;
