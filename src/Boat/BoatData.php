@@ -245,11 +245,30 @@ final class BoatData {
 		if ( $this->raw( 'price_hidden' ) ) {
 			return '';
 		}
-		$display = trim( (string) $this->field( 'price_display' ) );
-		if ( '' !== $display ) {
-			return $display;
+		// Prefer the numeric price so we control formatting ($ + thousands separators).
+		$price = $this->field( 'price' );
+		if ( '' !== $price && is_numeric( $price ) ) {
+			return $this->money( 'price' );
 		}
-		return $this->money( 'price' );
+		// Fall back to the display string, formatting any number it contains.
+		return $this->format_price_string( $this->field( 'price_display' ) );
+	}
+
+	/**
+	 * Turn a free-form price string like "189000.00 USD" into "$189,000".
+	 * Leaves non-numeric strings (e.g. "Call for price") untouched.
+	 */
+	private function format_price_string( string $value ): string {
+		if ( '' === $value ) {
+			return '';
+		}
+		if ( preg_match( '/[\d.,]+/', $value, $m ) ) {
+			$number = (float) str_replace( ',', '', $m[0] );
+			if ( $number > 0 ) {
+				return '$' . number_format( $number );
+			}
+		}
+		return $value;
 	}
 
 	private function location(): string {
