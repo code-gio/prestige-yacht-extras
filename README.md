@@ -1,0 +1,152 @@
+# Prestige Yacht Extras
+
+A WordPress plugin for the Prestige Yacht Sales site. It adds two things to the `boat`
+custom post type (Advanced Custom Fields):
+
+1. **Branded PDF spec sheets** — a button/link that generates a downloadable, brochure-quality
+   PDF for any boat listing.
+2. **A filterable boat archive** — a shortcode that renders an AJAX-driven, filterable grid of
+   boat listings ("Yacht Search").
+
+The plugin is **upload-and-go**: Dompdf is bundled in `vendor/`, so no `composer install` is
+required on the server.
+
+---
+
+## Requirements
+
+- WordPress 6.0+
+- PHP 7.4+ with the **GD** or **Imagick** extension (needed so images render inside PDFs)
+- The `boat` custom post type with the bundled ACF field group (Advanced Custom Fields)
+
+---
+
+## Installation
+
+1. Upload the plugin ZIP via **Plugins → Add New → Upload Plugin** (or copy the folder to
+   `wp-content/plugins/prestige-yacht-extras`).
+2. **Activate** the plugin.
+3. Add the shortcodes where you want them (see below).
+
+The PDF URL registers itself automatically — you do **not** need to visit Settings → Permalinks.
+(If a PDF link ever 404s, saving Permalinks once forces a rewrite refresh.)
+
+---
+
+## Shortcodes
+
+### `[boat_pdf_button]` — download a boat's PDF spec sheet
+
+Renders a "Download PDF" link for a boat.
+
+| Attribute | Default        | Description                                  |
+|-----------|----------------|----------------------------------------------|
+| `id`      | current post   | Boat post ID to target.                      |
+| `label`   | `Download PDF` | Button text.                                 |
+
+```text
+[boat_pdf_button]
+[boat_pdf_button id="123"]
+[boat_pdf_button label="Download Spec Sheet"]
+```
+
+The PDF includes a cover (hero image, title, price, key facts), grouped specification tables,
+an engines table, the description (rendered HTML), and gallery photo pages.
+
+**PDF URL** (in case you want to link directly):
+
+- Pretty permalinks: `/boat/{slug}/pdf/`
+- Plain permalinks: `?boat_pdf={id}`
+
+### `[boat_archive]` — filterable boat grid
+
+Renders the "Yacht Search" filter bar, a responsive card grid, and a "Load More" button.
+
+| Attribute  | Default | Description                       |
+|------------|---------|-----------------------------------|
+| `per_page` | `12`    | Cards per page / per Load More.   |
+| `columns`  | `3`     | Desktop grid columns (1–4).       |
+
+```text
+[boat_archive]
+[boat_archive per_page="9" columns="3"]
+```
+
+**Filters:** category (Power/Sail), condition (New/Used), manufacturer (auto-populated from your
+listings), length range, and price range. The filter state is reflected in the URL, so a
+filtered view is shareable/bookmarkable. The first page is server-rendered (works without JS and
+is indexable); filter changes and Load More use AJAX.
+
+---
+
+## Branding
+
+Branding lives in one file: `src/Pdf/Branding.php`, and the logo file lives in `assets/brand/`.
+
+```php
+private const LOGO_FILE   = 'prestige-ys-logo.png'; // PNG/JPG only — Dompdf does not support SVG
+public  const PRIMARY     = '#13294b'; // navy — headers, titles, price
+public  const ACCENT      = '#b8962f'; // gold — rules, labels
+public  const FONT_FAMILY = 'DejaVu Sans, sans-serif';
+public  const COMPANY     = 'Prestige Yacht Sales';
+```
+
+The same logo and colors are used by both the PDF and the archive cards. See
+[`assets/brand/README.md`](assets/brand/README.md) for swapping assets and custom fonts.
+
+---
+
+## Project structure
+
+```
+prestige-yacht-extras.php   Bootstrap: constants, autoloader, hooks
+src/
+  Plugin.php                Registers every hook (single source of truth)
+  Boat/BoatData.php         Normalizes ACF fields; for_post() (PDF) + card() (grid)
+  Pdf/
+    PdfController.php        /boat/{slug}/pdf/ route + ?boat_pdf={id}; streams the file
+    PdfRenderer.php          Template -> Dompdf -> PDF bytes
+    Branding.php             Logo / colors / company name
+  Shortcodes/PdfButtonShortcode.php   [boat_pdf_button]
+  Archive/
+    ArchiveShortcode.php     [boat_archive]; renders bar + first page; shared card renderer
+    BoatQuery.php            Filter params -> WP_Query (meta_query ranges/equality)
+    AjaxController.php        admin-ajax handler -> JSON { html, has_more, total }
+    ManufacturerOptions.php  Distinct manufacturers (transient-cached)
+  Support/Assets.php         Front-end button styles
+templates/
+  pdf/                       PDF template + partials
+  archive/                   filter-bar, grid, card
+assets/
+  css/ (button, archive)  js/ (archive)  pdf/ (pdf.css)  brand/ (logo)
+acf-json/                   Boat field group (ACF Local JSON sync)
+vendor/                     Bundled Dompdf (committed; no composer install needed)
+```
+
+---
+
+## Development
+
+- Classes are PSR-4 autoloaded (`PrestigeYacht\Extras\` → `src/`) via a self-contained
+  autoloader in the bootstrap, so Composer is **not** required at runtime.
+- Developers may still run `composer install` to manage Dompdf via Composer; the bundled
+  `vendor/` already satisfies the dependency.
+- Design specs live in `docs/superpowers/specs/`.
+
+### Building the distributable ZIP
+
+```sh
+cd ..
+zip -rq prestige-yacht-extras.zip prestige-yacht-extras \
+  -x 'prestige-yacht-extras/.git/*' -x 'prestige-yacht-extras/.gitignore' \
+  -x 'prestige-yacht-extras/docs/*' -x 'prestige-yacht-extras/.claude/*' \
+  -x '*.DS_Store' -x 'prestige-yacht-extras/*.zip'
+```
+
+---
+
+## Changelog
+
+- **1.1.0** — Add `[boat_archive]` filterable AJAX boat grid (category, condition, manufacturer,
+  length, price). Render boat descriptions as HTML; format prices as `$189,000`.
+- **1.0.0** — Initial release: server-side PDF spec sheets + `[boat_pdf_button]` shortcode.
