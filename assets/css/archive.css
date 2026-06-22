@@ -179,31 +179,34 @@
 }
 
 .pye-card__title {
-	margin: 0 0 12px;
-	font-size: 1.35rem;
-	font-weight: 800;
-	line-height: 1.2;
-	color: var(--pye-navy);
+	margin: 0 0 10px;
+	font-size: 19px;
+	font-weight: 700;
+	line-height: 29px;
+	color: #072c50;
 }
 
 .pye-card__loc {
 	display: flex;
 	align-items: center;
 	gap: 7px;
-	color: var(--pye-muted);
-	font-size: 1.02rem;
-	margin-bottom: 12px;
+	color: #64748b;
+	font-size: 14px;
+	font-weight: 500;
+	line-height: 29px;
+	margin-bottom: 8px;
 }
 
 .pye-card__pin {
-	color: var(--pye-muted);
+	color: #64748b;
 	flex: 0 0 auto;
 }
 
 .pye-card__price {
-	font-size: 1.25rem;
-	font-weight: 800;
-	color: var(--pye-navy);
+	font-size: 18px;
+	font-weight: 700;
+	line-height: 29px;
+	color: #072c50;
 }
 
 .pye-card__footer {
@@ -214,8 +217,8 @@
 }
 
 .pye-card__logo {
-	height: 34px;
-	width: auto;
+	width: 120px;
+	height: auto;
 	display: inline-block;
 }
 
