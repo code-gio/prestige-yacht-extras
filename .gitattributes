@@ -1,0 +1,8 @@
+# Exclude development-only files from GitHub-generated ZIP/tarball downloads
+# (the "Download ZIP" button and release source archives honor export-ignore).
+/docs            export-ignore
+/.gitignore      export-ignore
+/.gitattributes  export-ignore
+/.claude         export-ignore
+/composer.json   export-ignore
+*.zip            export-ignore
