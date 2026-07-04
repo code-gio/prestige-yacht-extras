@@ -97,6 +97,8 @@ final class ArchiveShortcode {
 		$cards_html    = self::render_cards( $query );
 		$has_more      = (int) $filters['paged'] < (int) $query->max_num_pages;
 		$total         = (int) $query->found_posts;
+		$showing_from  = $query->post_count > 0 ? ( max( 1, (int) $filters['paged'] ) - 1 ) * $per_page + 1 : 0;
+		$showing_to    = $showing_from + max( 0, (int) $query->post_count - 1 );
 		$manufacturers = ManufacturerOptions::get();
 
 		ob_start();

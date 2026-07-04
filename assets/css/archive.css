@@ -123,6 +123,19 @@
 }
 
 /* ---------- Results grid ---------- */
+/* "Showing X–Y of Z yachts" under the filter bar */
+.pye-count {
+	margin: 0 0 20px;
+	font-size: 0.95rem;
+	font-weight: 500;
+	color: var(--pye-muted);
+}
+
+.pye-count strong {
+	color: var(--pye-navy);
+	font-weight: 700;
+}
+
 .pye-grid {
 	display: grid;
 	grid-template-columns: repeat(var(--pye-cols, 3), minmax(0, 1fr));

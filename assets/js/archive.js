@@ -21,6 +21,9 @@
 		var form = root.querySelector( '.pye-filters' );
 		var results = root.querySelector( '.pye-results' );
 		var grid = root.querySelector( '.pye-grid' );
+		var count = root.querySelector( '.pye-count' );
+		var countRange = root.querySelector( '.pye-count__range' );
+		var countTotal = root.querySelector( '.pye-count__total' );
 		var empty = root.querySelector( '.pye-empty' );
 		var errEl = root.querySelector( '.pye-error' );
 		var loadWrap = root.querySelector( '.pye-loadmore-wrap' );
@@ -121,6 +124,7 @@
 					if ( empty ) {
 						empty.hidden = d.total > 0;
 					}
+					updateCount( d.total );
 					if ( loadWrap ) {
 						loadWrap.hidden = ! d.has_more;
 					}
@@ -140,6 +144,17 @@
 						loadBtn.disabled = false;
 					}
 				} );
+		}
+
+		// "Showing 1–N of Z yachts" — N is whatever is in the grid (Load More appends).
+		function updateCount( total ) {
+			if ( ! count || ! countRange || ! countTotal ) {
+				return;
+			}
+			var shown = grid.querySelectorAll( '.pye-card' ).length;
+			count.hidden = total < 1;
+			countRange.textContent = ( shown > 0 ? 1 : 0 ) + '–' + shown;
+			countTotal.textContent = total.toLocaleString();
 		}
 
 		function updateUrl( params ) {
