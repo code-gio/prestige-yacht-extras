@@ -42,9 +42,10 @@ final class ArchiveShortcode {
 				'columns'      => '3',
 				'category'     => '', // preset Power|Sail
 				'manufacturer' => '', // preset manufacturer
+				'model'        => '', // preset model line (partial match, e.g. Oceanis)
 				'len_min'      => '',
 				'len_max'      => '',
-				'lock'         => '', // comma list of locked keys: category,manufacturer,length
+				'lock'         => '', // comma list of locked keys: category,manufacturer,model,length
 			],
 			$atts,
 			'boat_archive'
@@ -61,6 +62,7 @@ final class ArchiveShortcode {
 			[
 				'category' => $atts['category'],
 				'mfr'      => $atts['manufacturer'],
+				'model'    => $atts['model'],
 				'len_min'  => $atts['len_min'],
 				'len_max'  => $atts['len_max'],
 			]
@@ -71,6 +73,7 @@ final class ArchiveShortcode {
 		$filters = [
 			'category' => in_array( 'category', $locked, true ) ? $presets['category'] : ( '' !== $get['category'] ? $get['category'] : $presets['category'] ),
 			'mfr'      => in_array( 'manufacturer', $locked, true ) ? $presets['mfr'] : ( '' !== $get['mfr'] ? $get['mfr'] : $presets['mfr'] ),
+			'model'    => in_array( 'model', $locked, true ) ? $presets['model'] : ( '' !== $get['model'] ? $get['model'] : $presets['model'] ),
 			'len_min'  => in_array( 'length', $locked, true ) ? $presets['len_min'] : ( '' !== $get['len_min'] ? $get['len_min'] : $presets['len_min'] ),
 			'len_max'  => in_array( 'length', $locked, true ) ? $presets['len_max'] : ( '' !== $get['len_max'] ? $get['len_max'] : $presets['len_max'] ),
 			'paged'    => $get['paged'],
@@ -99,7 +102,7 @@ final class ArchiveShortcode {
 		$total         = (int) $query->found_posts;
 		$showing_from  = $query->post_count > 0 ? ( max( 1, (int) $filters['paged'] ) - 1 ) * $per_page + 1 : 0;
 		$showing_to    = $showing_from + max( 0, (int) $query->post_count - 1 );
-		$manufacturers = ManufacturerOptions::get();
+		$manufacturers = ManufacturerOptions::get( (string) $filters['model'] );
 
 		ob_start();
 		echo '<div class="pye-archive">';

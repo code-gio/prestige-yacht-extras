@@ -68,9 +68,10 @@ Renders the "Yacht Search" filter bar, a responsive card grid, and a "Load More"
 | `columns`      | `3`     | Desktop grid columns (1–4).                                        |
 | `category`     | —       | Preset category: `Power` or `Sail`.                               |
 | `manufacturer` | —       | Preset manufacturer (exact match).                                |
+| `model`        | —       | Preset model line — case-insensitive partial match, so `Oceanis` matches "Oceanis 34.1" etc. No visible control; applies to every search on the page. |
 | `len_min`      | —       | Preset minimum length (ft).                                       |
 | `len_max`      | —       | Preset maximum length (ft).                                       |
-| `lock`         | —       | Comma list of filters to lock (hide + enforce): `category`, `manufacturer`, `length`. |
+| `lock`         | —       | Comma list of filters to lock (hide + enforce): `category`, `manufacturer`, `model`, `length`. |
 
 **Filters:** category (All / Power / Sail), manufacturer (auto-populated from your listings),
 and a length range. Results are **always sorted longest → shortest** by length, regardless of
@@ -87,7 +88,7 @@ server-rendered (works without JS, indexable); filter changes and Load More use 
 There are two ways to start the archive with a filter already applied:
 
 1. **URL parameter** (soft default — the visitor can change it). Link to the page that holds
-   `[boat_archive]` with any of `category`, `mfr`, `len_min`, `len_max`:
+   `[boat_archive]` with any of `category`, `mfr`, `model`, `len_min`, `len_max`:
 
    ```text
    /boats-for-sale/?mfr=Beneteau
@@ -105,11 +106,18 @@ There are two ways to start the archive with a filter already applied:
    Power Yachts page:  [boat_archive category="Power" lock="category"]
    Sail page:          [boat_archive category="Sail"  lock="category"]
    Beneteau page:      [boat_archive manufacturer="Beneteau" lock="manufacturer"]
+   Oceanis page:       [boat_archive model="Oceanis" lock="model"]
+   First page:         [boat_archive model="First" lock="model"]
    ```
 
    On the Power page the Power/Sail toggle is hidden and *every* result (and Load More, and any
    manufacturer/length search) stays within Power. On a brand page the manufacturer dropdown is
    hidden and results stay within that brand.
+
+   **Manufacturer vs. model:** use `manufacturer` for brands (Beneteau, Regal…) and `model` for
+   model lines within a brand (Oceanis, First, Flyer, Antares…). Manufacturer matches exactly;
+   model matches partially. On a model page the filter stays applied through every search, and
+   the manufacturer dropdown only lists brands that carry that model.
 
 ---
 

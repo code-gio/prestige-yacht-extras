@@ -20,7 +20,7 @@ final class BoatQuery {
 	private const LENGTH_KEY = 'nominal_length';
 
 	/** Filter keys this query understands. */
-	public const KEYS = [ 'category', 'mfr', 'len_min', 'len_max' ];
+	public const KEYS = [ 'category', 'mfr', 'model', 'len_min', 'len_max' ];
 
 	/**
 	 * Sanitize a raw input array (from $_GET or an AJAX POST) into known filter params.
@@ -42,6 +42,7 @@ final class BoatQuery {
 		return [
 			'category' => $category,
 			'mfr'      => isset( $input['mfr'] ) ? sanitize_text_field( (string) $input['mfr'] ) : '',
+			'model'    => isset( $input['model'] ) ? sanitize_text_field( (string) $input['model'] ) : '',
 			'len_min'  => $num( $input['len_min'] ?? '' ),
 			'len_max'  => $num( $input['len_max'] ?? '' ),
 			'paged'    => $paged,
@@ -69,6 +70,14 @@ final class BoatQuery {
 				'key'     => 'manufacturer',
 				'value'   => $f['mfr'],
 				'compare' => '=',
+			];
+		}
+		if ( '' !== $f['model'] ) {
+			// Partial, case-insensitive: "Oceanis" matches "Oceanis 34.1" etc.
+			$meta_query[] = [
+				'key'     => 'model',
+				'value'   => $f['model'],
+				'compare' => 'LIKE',
 			];
 		}
 

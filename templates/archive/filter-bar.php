@@ -20,6 +20,11 @@ $cat          = (string) $filters['category'];
 <form class="pye-filters" role="search" aria-label="<?php esc_attr_e( 'Yacht search', 'prestige-yacht-extras' ); ?>">
 	<h2 class="pye-filters__title"><?php esc_html_e( 'Yacht Search', 'prestige-yacht-extras' ); ?></h2>
 
+	<?php // Model has no visible control — it is a page-level filter that rides along with every search. ?>
+	<?php if ( '' !== (string) $filters['model'] ) : ?>
+		<input type="hidden" data-filter="model" value="<?php echo esc_attr( (string) $filters['model'] ); ?>">
+	<?php endif; ?>
+
 	<div class="pye-filters__row">
 		<?php if ( $lock_cat ) : ?>
 			<input type="hidden" data-filter="category" value="<?php echo esc_attr( $cat ); ?>">
