@@ -168,15 +168,20 @@
 }
 
 .pye-card__media {
+	position: relative;
 	aspect-ratio: 16 / 10;
 	background: var(--pye-bg-soft);
 	overflow: hidden;
 }
 
+/* Fill the media box completely (object-fit crops overflow). !important overrides the
+   theme's global `img { height:auto !important }`, which otherwise leaves the photo short. */
 .pye-card__img {
-	width: 100%;
-	height: 100%;
-	object-fit: cover;
+	position: absolute;
+	inset: 0;
+	width: 100% !important;
+	height: 100% !important;
+	object-fit: cover !important;
 	display: block;
 }
 

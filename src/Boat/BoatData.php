@@ -54,7 +54,7 @@ final class BoatData {
 			'location'        => $this->location(),
 			'hero'            => $this->hero_image(),
 			'gallery'         => $this->gallery_images(),
-			'description'     => (string) $this->field( 'description' ),
+			'description'     => $this->description(),
 			'additional'      => (string) $this->field( 'additional_specs' ),
 			'broker'          => $this->non_empty(
 				[
@@ -239,6 +239,19 @@ final class BoatData {
 			}
 		}
 		return $paths;
+	}
+
+	/**
+	 * Long description for the spec sheet: the ACF `description` field, falling back to
+	 * the WordPress editor content for listings whose copy lives in the post body.
+	 */
+	private function description(): string {
+		$desc = $this->field( 'description' );
+		if ( '' !== $desc ) {
+			return $desc;
+		}
+		$content = get_post_field( 'post_content', $this->post_id );
+		return is_string( $content ) ? trim( $content ) : '';
 	}
 
 	/**

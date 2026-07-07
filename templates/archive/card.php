@@ -14,7 +14,18 @@ if ( ! defined( 'ABSPATH' ) ) {
 	<div class="pye-card__media">
 		<?php
 		if ( $card['thumb_id'] ) {
-			echo get_the_post_thumbnail( $card['id'], 'large', [ 'class' => 'pye-card__img', 'loading' => 'lazy', 'alt' => esc_attr( $card['title'] ) ] );
+			// Inline !important beats the theme's global `img { height:auto !important }` rule
+			// so the photo fills the media box vertically (object-fit crops the overflow).
+			echo get_the_post_thumbnail(
+				$card['id'],
+				'large',
+				[
+					'class'   => 'pye-card__img',
+					'loading' => 'lazy',
+					'alt'     => esc_attr( $card['title'] ),
+					'style'   => 'width:100% !important;height:100% !important;object-fit:cover !important;display:block;',
+				]
+			);
 		} else {
 			echo '<span class="pye-card__noimg"></span>';
 		}

@@ -36,8 +36,8 @@ $pye_dir = defined( 'PYE_DIR' ) ? PYE_DIR : '';
 		<div class="section">
 			<h2>Description</h2>
 			<?php if ( '' !== trim( (string) $boat['description'] ) ) : ?>
-				<?php // Description is rich HTML from the editor — render it (sanitized), don't escape. ?>
-				<div class="description"><?php echo wp_kses_post( $boat['description'] ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- sanitized via wp_kses_post. ?></div>
+				<?php // Description may be plain text (ACF) or HTML (editor); wpautop handles line breaks for both, wp_kses_post sanitizes. ?>
+				<div class="description"><?php echo wp_kses_post( wpautop( $boat['description'] ) ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- sanitized via wp_kses_post. ?></div>
 			<?php endif; ?>
 			<?php if ( '' !== trim( (string) $boat['additional'] ) ) : ?>
 				<?php // Additional specs may be plain text or HTML; wpautop handles line breaks for both. ?>

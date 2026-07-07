@@ -16,8 +16,8 @@ final class BoatQuery {
 
 	public const DEFAULT_PER_PAGE = 12;
 
-	/** Meta key used for the length filter + ordering (advertised length). */
-	private const LENGTH_KEY = 'nominal_length';
+	/** Meta key used for both the length filter and the default sort — overall length (LOA). */
+	private const LENGTH_KEY = 'length_overall';
 
 	/** Filter keys this query understands. */
 	public const KEYS = [ 'category', 'mfr', 'model', 'len_min', 'len_max' ];
@@ -89,11 +89,14 @@ final class BoatQuery {
 			$meta_query[] = [ 'key' => self::LENGTH_KEY, 'value' => (float) $f['len_max'], 'type' => 'NUMERIC', 'compare' => '<=' ];
 		}
 
-		// Order by length DESC for every query, including boats missing a length (sorted last).
-		$meta_query['length_order'] = [
-			'relation' => 'OR',
-			[ 'key' => self::LENGTH_KEY, 'type' => 'NUMERIC', 'compare' => 'EXISTS' ],
-			[ 'key' => self::LENGTH_KEY, 'type' => 'NUMERIC', 'compare' => 'NOT EXISTS' ],
+		// Sort by overall length, longest first. WP can only ORDER BY a *leaf* meta clause
+		// (one with a `key`) — ordering by an OR *group* is silently ignored, which is why
+		// results were previously unsorted. So name the leaf clause and order by that name;
+		// the OR'd NOT EXISTS keeps boats that have no length (they sort last).
+		$meta_query[] = [
+			'relation'        => 'OR',
+			'has_length'      => [ 'key' => self::LENGTH_KEY, 'type' => 'NUMERIC', 'compare' => 'EXISTS' ],
+			'missing_length'  => [ 'key' => self::LENGTH_KEY, 'compare' => 'NOT EXISTS' ],
 		];
 
 		$args = [
@@ -101,7 +104,7 @@ final class BoatQuery {
 			'post_status'    => 'publish',
 			'posts_per_page' => $per_page,
 			'paged'          => (int) $f['paged'],
-			'orderby'        => [ 'length_order' => 'DESC' ],
+			'orderby'        => [ 'has_length' => 'DESC' ],
 			'meta_query'     => $meta_query,
 			'no_found_rows'  => false, // need found_posts for pagination.
 		];
