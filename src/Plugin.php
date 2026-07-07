@@ -33,6 +33,11 @@ final class Plugin {
 		// ACF Local JSON: keep the boat field group in sync from acf-json/.
 		add_filter( 'acf/settings/load_json', [ $this, 'register_acf_json_path' ] );
 
+		// Force the gallery field to return the full image array. Elementor Pro's "ACF Gallery
+		// Field" dynamic tag only renders when the return format is Image Array; a DB-saved copy
+		// of the field group can otherwise leave it as "id" and the carousel comes up empty.
+		add_filter( 'acf/load_field/key=field_images', [ $this, 'force_gallery_array_format' ] );
+
 		// PDF endpoint + rendering.
 		add_action( 'init', [ $this->pdf_controller, 'register_rewrite' ] );
 		add_action( 'init', [ $this, 'maybe_flush_rewrite' ], 11 );
@@ -93,5 +98,17 @@ final class Plugin {
 	public function register_acf_json_path( array $paths ): array {
 		$paths[] = PYE_DIR . 'acf-json';
 		return $paths;
+	}
+
+	/**
+	 * Force the boat gallery field to return the full image array regardless of any
+	 * DB-saved return format, so Elementor's ACF Gallery dynamic tag can render it.
+	 *
+	 * @param array<string,mixed> $field ACF field settings.
+	 * @return array<string,mixed>
+	 */
+	public function force_gallery_array_format( array $field ): array {
+		$field['return_format'] = 'array';
+		return $field;
 	}
 }

@@ -583,7 +583,7 @@
       "name": "images",
       "type": "gallery",
       "required": 0,
-      "return_format": "id",
+      "return_format": "array",
       "library": "all",
       "min": 0,
       "max": 0,

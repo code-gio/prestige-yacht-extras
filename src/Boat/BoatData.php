@@ -227,11 +227,12 @@ final class BoatData {
 		}
 		$paths = [];
 		foreach ( $ids as $id ) {
-			// Gallery may return IDs, arrays, or attachment objects depending on config.
-			if ( is_array( $id ) && isset( $id['ID'] ) ) {
-				$id = $id['ID'];
-			} elseif ( is_object( $id ) && isset( $id->ID ) ) {
-				$id = $id->ID;
+			// Gallery may return bare IDs, image arrays, or attachment objects depending on the
+			// field's return format. Array format keys the ID as 'ID' or 'id' across ACF versions.
+			if ( is_array( $id ) ) {
+				$id = $id['ID'] ?? $id['id'] ?? 0;
+			} elseif ( is_object( $id ) ) {
+				$id = $id->ID ?? 0;
 			}
 			$path = get_attached_file( (int) $id );
 			if ( $path && is_readable( $path ) ) {
