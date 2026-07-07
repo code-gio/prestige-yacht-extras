@@ -28,10 +28,7 @@ $pye_dir = defined( 'PYE_DIR' ) ? PYE_DIR : '';
 
 	<?php require $pye_dir . 'templates/pdf/partials/cover.php'; ?>
 
-	<?php require $pye_dir . 'templates/pdf/partials/specs-table.php'; ?>
-
-	<?php require $pye_dir . 'templates/pdf/partials/engines.php'; ?>
-
+	<?php // Description sits right under the cover (key facts), before the detailed spec tables. ?>
 	<?php if ( '' !== trim( (string) $boat['description'] ) || '' !== trim( (string) $boat['additional'] ) ) : ?>
 		<div class="section">
 			<h2>Description</h2>
@@ -45,6 +42,10 @@ $pye_dir = defined( 'PYE_DIR' ) ? PYE_DIR : '';
 			<?php endif; ?>
 		</div>
 	<?php endif; ?>
+
+	<?php require $pye_dir . 'templates/pdf/partials/specs-table.php'; ?>
+
+	<?php require $pye_dir . 'templates/pdf/partials/engines.php'; ?>
 
 	<?php require $pye_dir . 'templates/pdf/partials/photo-grid.php'; ?>
 
