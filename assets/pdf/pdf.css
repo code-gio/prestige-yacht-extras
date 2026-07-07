@@ -138,6 +138,12 @@ body {
 	page-break-inside: avoid;
 }
 
+/* Description block: let it start in the page-1 white space and flow across pages
+   instead of being pushed whole to page 2 by the page-break-inside: avoid above. */
+.section--flow {
+	page-break-inside: auto;
+}
+
 .section h2 {
 	font-size: 12pt;
 	color: #fff;

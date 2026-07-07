@@ -29,8 +29,9 @@ $pye_dir = defined( 'PYE_DIR' ) ? PYE_DIR : '';
 	<?php require $pye_dir . 'templates/pdf/partials/cover.php'; ?>
 
 	<?php // Description sits right under the cover (key facts), before the detailed spec tables. ?>
+	<?php // section--flow lets it start in the page-1 white space and continue across pages, rather than being pushed whole to page 2. ?>
 	<?php if ( '' !== trim( (string) $boat['description'] ) || '' !== trim( (string) $boat['additional'] ) ) : ?>
-		<div class="section">
+		<div class="section section--flow">
 			<h2>Description</h2>
 			<?php if ( '' !== trim( (string) $boat['description'] ) ) : ?>
 				<?php // Description may be plain text (ACF) or HTML (editor); wpautop handles line breaks for both, wp_kses_post sanitizes. ?>

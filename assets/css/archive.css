@@ -221,6 +221,14 @@
 	flex: 0 0 auto;
 }
 
+.pye-card__callout {
+	font-size: 14px;
+	font-weight: 500;
+	line-height: 29px;
+	color: #64748b;
+	margin-bottom: 8px;
+}
+
 .pye-card__price {
 	font-size: 18px;
 	font-weight: 700;

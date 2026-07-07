@@ -2,7 +2,7 @@
 /**
  * Single boat card. Matches the site's listing card.
  *
- * @var array{id:int,permalink:string,title:string,location:string,price:string,thumb_id:int} $card
+ * @var array{id:int,permalink:string,title:string,location:string,callout:string,price:string,thumb_id:int} $card
  * @var string $logo_url Bundled Prestige logo URL.
  */
 
@@ -39,6 +39,10 @@ if ( ! defined( 'ABSPATH' ) ) {
 				<svg class="pye-card__pin" viewBox="0 0 384 512" width="14" height="14" aria-hidden="true" style="flex:0 0 auto;color:#64748b;"><path fill="currentColor" d="M172.268 501.67C26.97 291.031 0 269.413 0 192 0 85.961 85.961 0 192 0s192 85.961 192 192c0 77.413-26.97 99.031-172.268 309.67-9.535 13.774-29.93 13.773-39.464 0zM192 272c44.183 0 80-35.817 80-80s-35.817-80-80-80-80 35.817-80 80 35.817 80 80 80z"/></svg>
 				<span><?php echo esc_html( $card['location'] ); ?></span>
 			</div>
+		<?php endif; ?>
+
+		<?php if ( '' !== $card['callout'] ) : ?>
+			<div class="pye-card__callout" style="margin:0 0 8px !important;font-size:14px !important;font-weight:500 !important;line-height:29px !important;color:#64748b !important;"><?php echo esc_html( $card['callout'] ); ?></div>
 		<?php endif; ?>
 
 		<?php if ( '' !== $card['price'] ) : ?>

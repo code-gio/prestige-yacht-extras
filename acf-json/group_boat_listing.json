@@ -33,6 +33,27 @@
       "wrapper": { "width": "33" }
     },
     {
+      "key": "field_new_boat_callout",
+      "label": "New Boat Status",
+      "name": "new_boat_callout",
+      "type": "select",
+      "instructions": "Shown on new-boat listing cards. Set manually — this is not fed from the API.",
+      "required": 0,
+      "choices": {
+        "in-stock": "In Stock",
+        "on-order": "On Order"
+      },
+      "default_value": "",
+      "allow_null": 1,
+      "return_format": "label",
+      "conditional_logic": [
+        [
+          { "field": "field_sale_class", "operator": "==", "value": "New" }
+        ]
+      ],
+      "wrapper": { "width": "33" }
+    },
+    {
       "key": "field_boat_category",
       "label": "Boat Category",
       "name": "boat_category",

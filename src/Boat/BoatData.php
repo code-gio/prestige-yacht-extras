@@ -32,7 +32,7 @@ final class BoatData {
 	 * Minimal data for an archive/grid card. Reuses the title/location/price formatting
 	 * without the heavy gallery path resolution used by the PDF.
 	 *
-	 * @return array{id:int,permalink:string,title:string,location:string,price:string,thumb_id:int}
+	 * @return array{id:int,permalink:string,title:string,location:string,callout:string,price:string,thumb_id:int}
 	 */
 	public static function card( int $post_id ): array {
 		$self = new self( $post_id );
@@ -41,6 +41,9 @@ final class BoatData {
 			'permalink' => (string) get_permalink( $post_id ),
 			'title'     => $self->title(),
 			'location'  => $self->location(),
+			// New-boat status ("In Stock" / "On Order"). Manually set; only present on new
+			// boats via the field's conditional logic, so used boats read back as ''.
+			'callout'   => $self->callout(),
 			'price'     => $self->price_display(),
 			'thumb_id'  => (int) get_post_thumbnail_id( $post_id ),
 		];
@@ -305,6 +308,21 @@ final class BoatData {
 			}
 		}
 		return $value;
+	}
+
+	/**
+	 * New-boat status label for the archive card. Reads the manually-set `new_boat_callout`
+	 * select and normalizes it to a display label regardless of the field's return format,
+	 * so a value-format field ("on-order") and a label-format field ("On Order") both render
+	 * cleanly. Unknown values pass through untouched.
+	 */
+	private function callout(): string {
+		$value = $this->field( 'new_boat_callout' );
+		$labels = [
+			'in-stock' => 'In Stock',
+			'on-order' => 'On Order',
+		];
+		return $labels[ $value ] ?? $value;
 	}
 
 	private function location(): string {
