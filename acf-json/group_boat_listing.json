@@ -3,6 +3,17 @@
   "title": "Boat Listing",
   "fields": [
     {
+      "key": "field_featured",
+      "label": "Featured",
+      "name": "featured",
+      "type": "true_false",
+      "instructions": "Show this boat in the home page carousel. Set manually — this is not fed from the API.",
+      "required": 0,
+      "default_value": 0,
+      "ui": 1,
+      "wrapper": { "width": "100" }
+    },
+    {
       "key": "field_document_id",
       "label": "Document ID",
       "name": "document_id",

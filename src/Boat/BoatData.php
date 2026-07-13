@@ -11,6 +11,9 @@ namespace PrestigeYacht\Extras\Boat;
  */
 final class BoatData {
 
+	/** Shown instead of a $0 or blank price when no usable price is available. */
+	private const CALL_FOR_PRICING = 'Call for Pricing';
+
 	/**
 	 * Build the normalized data array for a boat post.
 	 *
@@ -150,7 +153,6 @@ final class BoatData {
 			'Pricing & Status' => [
 				'Original Price'     => $this->money( 'original_price' ),
 				'Tax Status'         => $this->field( 'tax_status' ),
-				'Item Received'      => $this->field( 'item_received_date' ),
 			],
 		];
 
@@ -281,16 +283,20 @@ final class BoatData {
 	}
 
 	private function price_display(): string {
+		// Explicitly hidden price → invite an inquiry rather than showing a blank.
 		if ( $this->raw( 'price_hidden' ) ) {
-			return '';
+			return self::CALL_FOR_PRICING;
 		}
 		// Prefer the numeric price so we control formatting ($ + thousands separators).
+		// A zero (or negative) price means "no price set" → Call for Pricing, not "$0".
 		$price = $this->field( 'price' );
 		if ( '' !== $price && is_numeric( $price ) ) {
-			return $this->money( 'price' );
+			return (float) $price > 0 ? $this->money( 'price' ) : self::CALL_FOR_PRICING;
 		}
-		// Fall back to the display string, formatting any number it contains.
-		return $this->format_price_string( $this->field( 'price_display' ) );
+		// Fall back to the display string, formatting any number it contains. When there
+		// is nothing usable to show, fall back to Call for Pricing.
+		$formatted = $this->format_price_string( $this->field( 'price_display' ) );
+		return '' === $formatted ? self::CALL_FOR_PRICING : $formatted;
 	}
 
 	/**
@@ -325,12 +331,15 @@ final class BoatData {
 		return $labels[ $value ] ?? $value;
 	}
 
+	/**
+	 * Location line for cards and the PDF. Country is intentionally omitted — the
+	 * listings are US-only, so only city/state are shown (e.g. "Newport, RI").
+	 */
 	private function location(): string {
 		$parts = array_filter(
 			[
 				(string) $this->field( 'city' ),
 				(string) $this->field( 'state' ),
-				(string) $this->field( 'country' ),
 			],
 			static fn( $v ): bool => '' !== trim( $v )
 		);
