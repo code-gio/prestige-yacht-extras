@@ -74,7 +74,7 @@ final class BoatData {
 				[
 					'Year'    => $this->field( 'model_year' ),
 					'Length'  => $this->length( 'length_overall' ) ?: $this->length( 'nominal_length' ),
-					'Engines' => $this->field( 'num_engines' ),
+					'Engines' => $this->number( 'num_engines' ),
 					'Power'   => $this->hp( 'total_power' ),
 				]
 			),
@@ -115,14 +115,14 @@ final class BoatData {
 				'Cabin Headroom'     => $this->length( 'cabin_headroom' ),
 				'Freeboard'          => $this->length( 'freeboard' ),
 				'Deadrise'           => $this->unit( 'deadrise', '°' ),
-				'Displacement'       => $this->field( 'displacement' ),
-				'Dry Weight'         => $this->field( 'dry_weight' ),
-				'Ballast Weight'     => $this->field( 'ballast_weight' ),
+				'Displacement'       => $this->weight( 'displacement' ),
+				'Dry Weight'         => $this->weight( 'dry_weight' ),
+				'Ballast Weight'     => $this->weight( 'ballast_weight' ),
 			],
 			'Propulsion'     => [
-				'Number of Engines' => $this->field( 'num_engines' ),
+				'Number of Engines' => $this->number( 'num_engines' ),
 				'Total Power'       => $this->hp( 'total_power' ),
-				'Engine Hours'      => $this->field( 'engine_hours' ),
+				'Engine Hours'      => $this->unit( 'engine_hours', ' hrs' ),
 				'Cruising Speed'    => $this->unit( 'cruising_speed', ' kn' ),
 				'Maximum Speed'     => $this->unit( 'max_speed', ' kn' ),
 				'Range'             => $this->unit( 'range', ' mi' ),
@@ -132,20 +132,20 @@ final class BoatData {
 				'Windlass Type'     => $this->field( 'windlass_type' ),
 			],
 			'Capacities'     => [
-				'Fuel Capacity'        => $this->field( 'fuel_capacity' ),
-				'Fuel Tank Count'      => $this->field( 'fuel_tank_count' ),
+				'Fuel Capacity'        => $this->gallons( 'fuel_capacity' ),
+				'Fuel Tank Count'      => $this->number( 'fuel_tank_count' ),
 				'Fuel Tank Material'   => $this->field( 'fuel_tank_material' ),
-				'Water Capacity'       => $this->field( 'water_capacity' ),
-				'Water Tank Count'     => $this->field( 'water_tank_count' ),
+				'Water Capacity'       => $this->gallons( 'water_capacity' ),
+				'Water Tank Count'     => $this->number( 'water_tank_count' ),
 				'Water Tank Material'  => $this->field( 'water_tank_material' ),
-				'Holding Tank Capacity'=> $this->field( 'holding_tank_capacity' ),
-				'Holding Tank Count'   => $this->field( 'holding_tank_count' ),
+				'Holding Tank Capacity'=> $this->gallons( 'holding_tank_capacity' ),
+				'Holding Tank Count'   => $this->number( 'holding_tank_count' ),
 				'Holding Tank Material'=> $this->field( 'holding_tank_material' ),
 			],
 			'Accommodations' => [
-				'Cabins'             => $this->field( 'cabins' ),
-				'Heads'              => $this->field( 'heads' ),
-				'Maximum Passengers' => $this->field( 'max_passengers' ),
+				'Cabins'             => $this->number( 'cabins' ),
+				'Heads'              => $this->number( 'heads' ),
+				'Maximum Passengers' => $this->number( 'max_passengers' ),
 				'Convertible Saloon' => $this->yes_no( 'convertible_saloon' ),
 				'Electrical Circuit' => $this->unit( 'electrical_circuit', ' V' ),
 				'Trim Tabs'          => $this->yes_no( 'trim_tabs' ),
@@ -186,9 +186,10 @@ final class BoatData {
 				[
 					'Make'         => $engine['make'] ?? '',
 					'Model'        => $engine['model'] ?? '',
+					// Year is a plain integer — never thousands-separated ("2020", not "2,020").
 					'Year'         => $engine['year'] ?? '',
-					'Power (HP)'   => $engine['power'] ?? '',
-					'Hours'        => $engine['hours'] ?? '',
+					'Power'        => $this->unit_value( $engine['power'] ?? '', ' HP' ),
+					'Hours'        => $this->unit_value( $engine['hours'] ?? '', ' hrs' ),
 					'Fuel'         => $engine['fuel'] ?? '',
 					'Type'         => $engine['type'] ?? '',
 					'Transmission' => $engine['transmission'] ?? '',
@@ -379,9 +380,54 @@ final class BoatData {
 		return $this->unit( $name, ' HP' );
 	}
 
+	/** Weights (displacement, dry/ballast) are pounds in the listing feed. */
+	private function weight( string $name ): string {
+		return $this->unit( $name, ' lbs' );
+	}
+
+	/** Tank capacities are US gallons in the listing feed. */
+	private function gallons( string $name ): string {
+		return $this->unit( $name, ' gal' );
+	}
+
+	/** A count with no unit — formatted, so four-digit counts still read cleanly. */
+	private function number( string $name ): string {
+		return $this->unit( $name, '' );
+	}
+
 	private function unit( string $name, string $unit ): string {
-		$value = $this->field( $name );
-		return '' === $value ? '' : $value . $unit;
+		return $this->unit_value( $this->field( $name ), $unit );
+	}
+
+	/**
+	 * Append a unit to an already-read value (repeater sub-fields have no field name here).
+	 *
+	 * @param mixed $value Raw sub-field value.
+	 */
+	private function unit_value( $value, string $unit ): string {
+		$value = is_scalar( $value ) ? trim( (string) $value ) : '';
+		// Unset numeric ACF fields read back as 0 — drop them here so the unit doesn't
+		// smuggle a "0 lbs" row past non_empty()'s bare-zero filter.
+		if ( '' === $value || ( is_numeric( $value ) && 0.0 === (float) $value ) ) {
+			return '';
+		}
+		return $this->format_number( $value ) . $unit;
+	}
+
+	/**
+	 * Thousands-separate a number while keeping the decimals it actually carries
+	 * (20000 → "20,000", 44.33 → "44.33", 13.50 → "13.5"). Non-numeric values pass through.
+	 */
+	private function format_number( string $value ): string {
+		if ( ! is_numeric( $value ) ) {
+			return $value;
+		}
+		$decimals = 0;
+		$dot      = strpos( $value, '.' );
+		if ( false !== $dot ) {
+			$decimals = strlen( rtrim( substr( $value, $dot + 1 ), '0' ) );
+		}
+		return number_format( (float) $value, $decimals );
 	}
 
 	private function money( string $name ): string {
