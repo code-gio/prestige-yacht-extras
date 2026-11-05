@@ -89,8 +89,8 @@ final class BoatData {
 	 * @return array<string,array<string,string>>
 	 */
 	private function spec_sections(): array {
-		// Engine hours carry their own label, so the row is resolved before the table.
-		$hours = $this->engine_hours_row();
+		// Engine hours are one row per engine, so they are resolved before the table.
+		$hours = $this->engine_hours_rows();
 
 		$sections = [
 			'Overview'       => [
@@ -125,7 +125,7 @@ final class BoatData {
 			'Propulsion'     => [
 				'Number of Engines' => $this->number( 'num_engines' ),
 				'Total Power'       => $this->hp( 'total_power' ),
-				$hours['label']     => $hours['value'],
+			] + $hours + [
 				'Cruising Speed'    => $this->unit( 'cruising_speed', ' kn' ),
 				'Maximum Speed'     => $this->unit( 'max_speed', ' kn' ),
 				'Range'             => $this->unit( 'range', ' mi' ),
@@ -170,50 +170,52 @@ final class BoatData {
 	}
 
 	/**
-	 * The Propulsion table's engine-hours row, as label + value.
+	 * The Propulsion table's engine-hours rows, as label => value.
 	 *
 	 * Hours belong to an engine, not to the boat: a twin with 900 hours on each engine has
 	 * 900 hours, not 1,800. The feed field behind `engine_hours` is TotalEngineHoursNumeric
 	 * — the sum across engines — so on its own it reads doubled on a twin and tripled on a
-	 * triple. Prefer the per-engine figures from the `engines` repeater and list them one by
-	 * one ("900 hrs, 900 hrs"), which also keeps engines with unequal hours honest instead of
-	 * flattening them into one number.
+	 * triple. The per-engine figures from the `engines` repeater are listed one row each
+	 * ("Engine 1 Hours", "Engine 2 Hours"), which also keeps engines with unequal hours
+	 * honest instead of flattening them into one number.
 	 *
-	 * With no per-engine hours recorded there is nothing to list, so the feed total is shown
-	 * under a label saying what it is rather than being divided down into a figure no one
-	 * entered.
+	 * With no per-engine hours recorded, a single-engine boat shows the feed figure (which
+	 * is that engine's hours). A multi-engine boat shows nothing, because the only figure
+	 * available is the summed total and that must never be printed.
 	 *
-	 * @return array{label:string,value:string}
+	 * @return array<string,string>
 	 */
-	private function engine_hours_row(): array {
+	private function engine_hours_rows(): array {
 		$per_engine = $this->per_engine_hours();
 		if ( ! empty( $per_engine ) ) {
-			return [
-				'label' => 'Engine Hours',
-				'value' => implode( ', ', $per_engine ),
-			];
+			$rows = [];
+			foreach ( $per_engine as $position => $hours ) {
+				$rows[ 'Engine ' . $position . ' Hours' ] = $hours;
+			}
+			return $rows;
 		}
 
 		$count = (int) $this->field( 'num_engines' );
-		return [
-			'label' => $count > 1 ? 'Total Engine Hours' : 'Engine Hours',
-			'value' => $this->unit( 'engine_hours', ' hrs' ),
-		];
+		if ( $count > 1 ) {
+			return [];
+		}
+		return [ 'Engine Hours' => $this->unit( 'engine_hours', ' hrs' ) ];
 	}
 
 	/**
-	 * Formatted hours for each engine, in repeater row order.
+	 * Formatted hours for each engine, keyed by 1-based repeater position.
 	 *
 	 * Reuses engines(), so the figures here are the same strings the Engines table prints.
-	 * Rows with no hours recorded drop out rather than showing up as a blank entry.
+	 * Rows with no hours recorded drop out rather than showing up as a blank entry, but
+	 * keep their position so "Engine 2 Hours" still means the second engine.
 	 *
 	 * @return array<int,string>
 	 */
 	private function per_engine_hours(): array {
 		$hours = [];
-		foreach ( $this->engines() as $row ) {
+		foreach ( array_values( $this->engines() ) as $index => $row ) {
 			if ( isset( $row['Hours'] ) && '' !== $row['Hours'] ) {
-				$hours[] = $row['Hours'];
+				$hours[ $index + 1 ] = $row['Hours'];
 			}
 		}
 		return $hours;
